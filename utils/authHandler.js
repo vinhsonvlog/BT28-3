@@ -40,8 +40,11 @@ module.exports = {
     },
     CheckRole: function (...requiredRole) {
         return function (req, res, next) {
-            let currentRole = req.user.role.name;
-            if (requiredRole.includes(currentRole)) {
+            let currentRole = String(req.user?.role?.name || '').toUpperCase();
+            let normalizedRequiredRoles = requiredRole.map(function (roleName) {
+                return String(roleName).toUpperCase();
+            });
+            if (normalizedRequiredRoles.includes(currentRole)) {
                 next()
                 return;
             }
